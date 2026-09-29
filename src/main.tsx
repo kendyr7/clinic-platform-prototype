@@ -1,7 +1,3 @@
-import '@fontsource/poppins/400.css';
-import '@fontsource/poppins/500.css';
-import '@fontsource/poppins/600.css';
-import '@fontsource/poppins/700.css';
 import '@mantine/core/styles.css';
 import './styles.css';
 
@@ -11,10 +7,10 @@ import { createTheme, MantineProvider } from '@mantine/core';
 import App from './App';
 
 const theme = createTheme({
-  primaryColor: 'grape',
-  primaryShade: 7,
-  fontFamily: 'Poppins, system-ui, sans-serif',
-  headings: { fontFamily: 'Poppins, system-ui, sans-serif', fontWeight: '600' },
+  primaryColor: 'blue',
+  primaryShade: 6,
+  fontFamily: 'Arial, Helvetica, sans-serif',
+  headings: { fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: '600' },
   defaultRadius: 'sm',
   fontSizes: { xs: '0.75rem', sm: '0.8125rem', md: '0.875rem', lg: '1rem', xl: '1.125rem' },
   colors: {

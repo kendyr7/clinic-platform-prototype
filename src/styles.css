@@ -1,6 +1,6 @@
 :root {
   color: #25202a;
-  background: #f6f6f8;
+  background: #fff;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
@@ -17,7 +17,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100dvh;
-  background: #f6f6f8;
+  background: #fff;
 }
 
 button,
@@ -33,7 +33,11 @@ button:active {
 
 .clinical-shell {
   min-height: 100dvh;
-  background: #f6f6f8;
+  background: #fff;
+}
+
+.sidebar-mobile-close {
+  display: none;
 }
 
 .app-navbar {
@@ -42,10 +46,64 @@ button:active {
   transition: width 180ms ease;
 }
 
+.patient-mode .app-navbar {
+  border-right-color: #e4e7e9;
+}
+
 .brand-row {
   min-height: 66px;
   padding: 12px;
   border-bottom: 1px solid #efedf0;
+}
+
+.patient-mode .brand-row {
+  min-height: 83px;
+  padding: 18px 14px;
+  border-bottom: 0;
+}
+
+.brand-name {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-search {
+  position: relative;
+  margin: 0 3px 17px;
+}
+
+.sidebar-search .mantine-TextInput-input {
+  border: 0;
+  background: transparent;
+  font-size: 14px;
+}
+
+.sidebar-search-results {
+  position: absolute;
+  z-index: 30;
+  width: 100%;
+  padding: 4px;
+  background: #fff;
+}
+
+.sidebar-search-results button {
+  width: 100%;
+  padding: 8px;
+  text-align: left;
+}
+
+.sidebar-search-results button:hover {
+  background: #f2f4f5;
+}
+
+.sidebar-group-label {
+  margin: 22px 11px 5px;
+  color: #8b949b;
+  font-size: 11px;
+  font-weight: 600;
 }
 
 .nav-scroll {
@@ -61,12 +119,23 @@ button:active {
 }
 
 .app-navbar .mantine-NavLink-root:hover {
-  background: #f7f3f8;
+  background: #f2f4f5;
 }
 
 .app-navbar .mantine-NavLink-root[data-active] {
-  color: #842a99;
-  background: #f6e6f9;
+  color: #168de2;
+  background: #f0f2f3;
+}
+
+.patient-mode .app-navbar .mantine-NavLink-root {
+  min-height: 42px;
+  color: #4a5157;
+  font-size: 14px;
+}
+
+.patient-mode .app-navbar .mantine-NavLink-root[data-active] {
+  color: #168de2;
+  background: #f0f2f3;
 }
 
 .collapsed-nav {
@@ -75,12 +144,27 @@ button:active {
 }
 
 .collapsed-nav.active {
-  background: #f6e6f9;
+  background: #f0f2f3;
 }
 
 .navbar-footer {
   padding: 10px;
   border-top: 1px solid #efedf0;
+}
+
+.patient-mode .navbar-footer {
+  padding: 10px 14px 16px;
+  border-top: 0;
+}
+
+.sidebar-collapse {
+  margin-bottom: 24px;
+}
+
+.patient-mode .profile-button {
+  border-top: 1px solid #e4e7e9;
+  border-radius: 0;
+  padding-top: 15px;
 }
 
 .profile-button {
@@ -94,7 +178,7 @@ button:active {
 }
 
 .profile-button:hover {
-  background: #f7f3f8;
+  background: #f2f4f5;
 }
 
 .profile-copy {
@@ -187,13 +271,13 @@ button:active {
 .content-panel,
 .metric-panel,
 .toolbar-panel,
-.patient-hero,
 .calendar-panel,
 .encounter-nav,
 .settings-nav {
   border-color: #e5e1e7;
   border-radius: 4px;
   background: #ffffff;
+  box-shadow: none;
 }
 
 .content-panel {
@@ -398,68 +482,9 @@ button:active {
   background: #fbf8fc;
 }
 
-.patient-hero {
-  padding: 17px 18px;
-}
-
 .inline-icon {
   margin-right: 4px;
   vertical-align: -2px;
-}
-
-.patient-detail-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 285px;
-  gap: 16px;
-}
-
-.clinical-block {
-  min-height: 94px;
-  padding: 13px;
-  border-left: 3px solid #d8b4e1;
-  background: #faf8fb;
-}
-
-.timeline-row {
-  position: relative;
-  display: grid;
-  grid-template-columns: 16px minmax(0, 1fr);
-  gap: 10px;
-  min-height: 71px;
-  padding-bottom: 14px;
-}
-
-.timeline-row::before {
-  position: absolute;
-  top: 11px;
-  bottom: -2px;
-  left: 4px;
-  width: 1px;
-  background: #e0d4e3;
-  content: '';
-}
-
-.timeline-row:last-child::before {
-  display: none;
-}
-
-.timeline-marker {
-  z-index: 1;
-  width: 9px;
-  height: 9px;
-  margin-top: 5px;
-  border: 2px solid #9c36b5;
-  border-radius: 50%;
-  background: #ffffff;
-}
-
-.vital-row {
-  min-height: 39px;
-  border-bottom: 1px solid #efedf0;
-}
-
-.vital-row:last-child {
-  border-bottom: 0;
 }
 
 .encounter-layout {
@@ -529,8 +554,8 @@ button:active {
 }
 
 .settings-nav .mantine-NavLink-root[data-active] {
-  color: #842a99;
-  background: #f6e6f9;
+  color: #168de2;
+  background: #f0f2f3;
 }
 
 .settings-content {
@@ -608,15 +633,15 @@ button:active {
 }
 
 .mantine-Tabs-tab[data-active] {
-  color: #842a99;
-  background: #f6e6f9;
+  color: #168de2;
+  background: #f0f2f3;
 }
 
 .mantine-TextInput-input:focus,
 .mantine-Textarea-input:focus,
 .mantine-Select-input:focus {
-  border-color: #9c36b5;
-  box-shadow: 0 0 0 2px rgba(156, 54, 181, 0.12);
+  border-color: #228be6;
+  box-shadow: 0 0 0 2px rgba(34, 139, 230, 0.12);
 }
 
 @media (max-width: 1180px) {
@@ -633,7 +658,6 @@ button:active {
 @media (max-width: 900px) {
   .dashboard-grid,
   .secondary-grid,
-  .patient-detail-grid,
   .encounter-layout,
   .settings-layout {
     grid-template-columns: 1fr;
@@ -657,6 +681,9 @@ button:active {
 }
 
 @media (max-width: 760px) {
+  .sidebar-mobile-close {
+    display: inline-flex;
+  }
   .topbar {
     align-items: flex-start;
     padding: 10px 14px;
@@ -671,11 +698,10 @@ button:active {
   }
 
   .content-panel,
-  .patient-hero {
+  .calendar-panel {
     padding: 14px;
   }
 
-  .patient-hero > .mantine-Group-root,
   .toolbar-panel > .mantine-Group-root,
   .patient-table-panel > .mantine-Group-root {
     align-items: stretch;

@@ -34,13 +34,11 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import {
-  IconActivity,
   IconAdjustments,
   IconBell,
   IconBrandGoogleFilled,
   IconCalendarEvent,
   IconChartBar,
-  IconChevronDown,
   IconChevronLeft,
   IconChevronRight,
   IconClipboardCheck,
@@ -52,13 +50,11 @@ import {
   IconHome2,
   IconLayoutSidebarLeftCollapse,
   IconLayoutSidebarLeftExpand,
-  IconMenu2,
+  IconMedicalCross,
   IconMessageCircle,
   IconNotes,
-  IconPhone,
   IconPlus,
   IconPrescription,
-  IconPrinter,
   IconSearch,
   IconSettings,
   IconStethoscope,
@@ -67,6 +63,7 @@ import {
   IconX,
 } from '@tabler/icons-react';
 import { FormEvent, ReactNode, useEffect, useMemo, useState } from 'react';
+import PatientWorkspace, { type PatientTab } from './PatientWorkspace';
 
 type Screen = 'dashboard' | 'agenda' | 'patients' | 'patient-detail' | 'encounter' | 'orders' | 'settings';
 
@@ -103,12 +100,11 @@ const appointments = [
 ];
 
 const navigation: Array<{ screen: Screen; label: string; icon: typeof IconHome2 }> = [
-  { screen: 'dashboard', label: 'Inicio', icon: IconHome2 },
-  { screen: 'agenda', label: 'Agenda', icon: IconCalendarEvent },
+  { screen: 'dashboard', label: 'Espacios', icon: IconHome2 },
   { screen: 'patients', label: 'Pacientes', icon: IconUsers },
+  { screen: 'agenda', label: 'Agenda', icon: IconCalendarEvent },
   { screen: 'encounter', label: 'Consulta', icon: IconStethoscope },
   { screen: 'orders', label: 'Resultados', icon: IconFlask },
-  { screen: 'settings', label: 'Configuración', icon: IconSettings },
 ];
 
 const screenTitles: Record<Screen, { title: string; description: string }> = {
@@ -140,7 +136,7 @@ function SectionHeader({ title, description, action }: { title: string; descript
   );
 }
 
-function Metric({ label, value, detail, icon, color = 'grape' }: { label: string; value: string; detail: string; icon: ReactNode; color?: string }) {
+function Metric({ label, value, detail, icon, color = 'blue' }: { label: string; value: string; detail: string; icon: ReactNode; color?: string }) {
   return (
     <Paper className="metric-panel" withBorder shadow="sm">
       <Group justify="space-between" align="flex-start" wrap="nowrap">
@@ -365,67 +361,6 @@ function PatientsScreen({ onOpenPatient, onNewPatient }: { onOpenPatient: () => 
   );
 }
 
-function PatientDetailScreen({ onBack, onStartEncounter }: { onBack: () => void; onStartEncounter: () => void }) {
-  return (
-    <Stack gap="md">
-      <Paper withBorder shadow="sm" className="patient-hero">
-        <Group justify="space-between" align="flex-start" gap="md">
-          <Group align="flex-start" wrap="nowrap">
-            <Avatar color="#9c36b5" radius="sm" size={58}>AM</Avatar>
-            <Box>
-              <Group gap="xs"><Title order={2}>Ana María López</Title><Badge color="green" variant="light" radius="sm">Activa</Badge></Group>
-              <Text size="sm" c="dimmed">PA-1048 | 42 años | Femenino</Text>
-              <Group gap="lg" mt="xs"><Text size="xs"><IconPhone size={14} className="inline-icon" /> +505 8854 3172</Text><Text size="xs"><IconMessageCircle size={14} className="inline-icon" /> anamaria.lopez@email.com</Text></Group>
-            </Box>
-          </Group>
-          <Group gap="xs"><Button variant="default" leftSection={<IconPrinter size={16} />}>Imprimir</Button><Button leftSection={<IconStethoscope size={16} />} onClick={onStartEncounter}>Iniciar consulta</Button></Group>
-        </Group>
-      </Paper>
-      <div className="patient-detail-grid">
-        <Stack gap="md">
-          <Paper withBorder shadow="sm" className="content-panel">
-            <Tabs defaultValue="summary" variant="pills" radius="sm">
-              <Tabs.List mb="lg"><Tabs.Tab value="summary">Resumen</Tabs.Tab><Tabs.Tab value="history">Evolución</Tabs.Tab><Tabs.Tab value="medications">Medicamentos</Tabs.Tab><Tabs.Tab value="documents">Documentos</Tabs.Tab></Tabs.List>
-              <Tabs.Panel value="summary">
-                <SectionHeader title="Resumen clínico" description="Información activa y antecedentes relevantes." />
-                <SimpleGrid cols={{ base: 1, md: 2 }} mt="lg" spacing="md">
-                  <div className="clinical-block"><Text size="xs" c="dimmed" fw={600}>CONDICIONES ACTIVAS</Text><Text size="sm" fw={600} mt="xs">Hipertensión esencial</Text><Text size="xs" c="dimmed">Diagnosticada en marzo de 2023</Text></div>
-                  <div className="clinical-block"><Text size="xs" c="dimmed" fw={600}>ALERGIAS</Text><Badge color="red" variant="light" radius="sm" mt="xs">Penicilina</Badge><Text size="xs" c="dimmed" mt={5}>Reacción cutánea moderada</Text></div>
-                  <div className="clinical-block"><Text size="xs" c="dimmed" fw={600}>MEDICACIÓN ACTUAL</Text><Text size="sm" fw={600} mt="xs">Losartán 50 mg</Text><Text size="xs" c="dimmed">1 tableta por la mañana</Text></div>
-                  <div className="clinical-block"><Text size="xs" c="dimmed" fw={600}>ÚLTIMO CONTROL</Text><Text size="sm" fw={600} mt="xs">24 de septiembre de 2026</Text><Text size="xs" c="dimmed">PA 132/84 mmHg</Text></div>
-                </SimpleGrid>
-                <Divider my="lg" />
-                <Title order={3} mb="md">Últimas consultas</Title>
-                <Stack gap={0}>
-                  {[['24 sep 2026', 'Control de hipertensión', 'PA estable. Continúa tratamiento actual.'], ['26 ago 2026', 'Seguimiento clínico', 'Mejoría de cefalea. Sin eventos adversos.'], ['18 jul 2026', 'Consulta general', 'Ajuste de losartán a 50 mg diarios.']].map(([date, title, note]) => (
-                    <div className="timeline-row" key={date}><div className="timeline-marker" /><Box><Text size="xs" c="dimmed">{date}</Text><Text size="sm" fw={600}>{title}</Text><Text size="xs" c="dimmed">{note}</Text></Box></div>
-                  ))}
-                </Stack>
-              </Tabs.Panel>
-              <Tabs.Panel value="history"><Text size="sm" c="dimmed">La evolución completa se mostrará en orden cronológico.</Text></Tabs.Panel>
-              <Tabs.Panel value="medications"><Text size="sm" c="dimmed">Tratamientos activos, suspendidos y renovaciones.</Text></Tabs.Panel>
-              <Tabs.Panel value="documents"><Text size="sm" c="dimmed">Consentimientos, recetas y resultados adjuntos.</Text></Tabs.Panel>
-            </Tabs>
-          </Paper>
-        </Stack>
-        <Stack gap="md">
-          <Paper withBorder shadow="sm" className="content-panel vital-panel">
-            <Title order={3}>Signos vitales</Title>
-            <Text size="xs" c="dimmed" mb="md">Últimos registros</Text>
-            {[['Presión arterial', '132/84', 'mmHg'], ['Frecuencia cardiaca', '74', 'lpm'], ['Peso', '68.4', 'kg'], ['IMC', '25.1', 'kg/m²']].map(([label, value, unit]) => <Group justify="space-between" className="vital-row" key={label}><Text size="xs" c="dimmed">{label}</Text><Text size="sm" fw={600}>{value} <Text span size="xs" c="dimmed">{unit}</Text></Text></Group>)}
-          </Paper>
-          <Paper withBorder shadow="sm" className="content-panel">
-            <Title order={3}>Próxima cita</Title>
-            <Text fw={600} mt="md">Hoy, 10:30</Text><Text size="xs" c="dimmed">Control de presión arterial</Text>
-            <Button variant="light" fullWidth mt="md" leftSection={<IconCalendarEvent size={16} />}>Reprogramar</Button>
-          </Paper>
-          <Button variant="subtle" color="gray" leftSection={<IconChevronLeft size={16} />} onClick={onBack}>Volver a pacientes</Button>
-        </Stack>
-      </div>
-    </Stack>
-  );
-}
-
 function EncounterScreen({ onFinish }: { onFinish: () => void }) {
   const [saved, setSaved] = useState(false);
   const [activeSection, setActiveSection] = useState('Motivo');
@@ -525,6 +460,7 @@ function App() {
   const [notificationsOpen, { open: openNotifications, close: closeNotifications }] = useDisclosure(false);
   const [search, setSearch] = useState('');
   const [toast, setToast] = useState('');
+  const [patientTab, setPatientTab] = useState<PatientTab>('Tareas');
 
   useEffect(() => {
     const handleHash = () => {
@@ -541,6 +477,11 @@ function App() {
     closeMobile();
   };
 
+  const openPatientWorkspace = (tab: PatientTab = 'Tareas') => {
+    setPatientTab(tab);
+    navigate('patient-detail');
+  };
+
   const current = screenTitles[screen];
   const matchingPatients = useMemo(() => search.length > 1 ? patients.filter((patient) => patient.name.toLowerCase().includes(search.toLowerCase())).slice(0, 3) : [], [search]);
 
@@ -552,40 +493,44 @@ function App() {
   };
 
   return (
-    <AppShell navbar={{ width: collapsed ? 64 : 248, breakpoint: 'sm', collapsed: { mobile: !mobileOpen } }} padding={0} className="clinical-shell">
+    <AppShell navbar={{ width: collapsed ? 64 : 'clamp(218px, 17.3vw, 340px)', breakpoint: 'sm', collapsed: { mobile: !mobileOpen } }} padding={0} className={`clinical-shell ${screen === 'patient-detail' ? 'patient-mode' : ''}`}>
       <AppShell.Navbar className="app-navbar">
         <Group className="brand-row" justify={collapsed ? 'center' : 'space-between'} wrap="nowrap">
-          {!collapsed && <Group gap="sm" wrap="nowrap"><ThemeIcon size={34} radius="sm"><IconHeartbeat size={20} /></ThemeIcon><Box><Text fw={700} size="sm">Clínica Aurora</Text><Text size="xs" c="dimmed">Gestión clínica</Text></Box></Group>}
-          {collapsed && <ThemeIcon size={34} radius="sm"><IconHeartbeat size={20} /></ThemeIcon>}
-          {!collapsed && <ActionIcon variant="subtle" color="gray" onClick={() => setCollapsed(true)} aria-label="Contraer navegación"><IconLayoutSidebarLeftCollapse size={18} /></ActionIcon>}
+          <ThemeIcon size={34} radius="xl" color="grape" variant="filled" aria-label="Clínica Aurora"><IconMedicalCross size={22} /></ThemeIcon>
+          {!collapsed && <Text size="sm" fw={700} className="brand-name">Clínica Aurora</Text>}
+          <ActionIcon className="sidebar-mobile-close" variant="subtle" color="gray" aria-label="Cerrar navegación" onClick={closeMobile}><IconX size={19} /></ActionIcon>
         </Group>
         <ScrollArea className="nav-scroll">
-          <Stack gap={4} p="xs">
+          <Stack gap={3} p="xs" className="main-nav-list">
+            {!collapsed && <div className="sidebar-search"><TextInput value={search} onChange={(event) => setSearch(event.currentTarget.value)} leftSection={<IconSearch size={18} />} placeholder="Buscar" aria-label="Buscar pacientes en la navegación" />{matchingPatients.length > 0 && <Paper className="sidebar-search-results" withBorder>{matchingPatients.map((patient) => <UnstyledButton key={patient.id} onClick={() => { openPatientWorkspace(); setSearch(''); }}><Text size="sm" fw={500}>{patient.name}</Text></UnstyledButton>)}</Paper>}</div>}
             {navigation.map((item) => {
               const Icon = item.icon;
               const active = screen === item.screen || (screen === 'patient-detail' && item.screen === 'patients');
               return collapsed ? <Tooltip label={item.label} position="right" key={item.screen}><ActionIcon className={`collapsed-nav ${active ? 'active' : ''}`} variant="subtle" color={active ? 'grape' : 'gray'} size={40} onClick={() => navigate(item.screen)} aria-label={item.label}><Icon size={19} stroke={1.8} /></ActionIcon></Tooltip> : <NavLink key={item.screen} label={item.label} active={active} leftSection={<Icon size={18} stroke={1.8} />} onClick={() => navigate(item.screen)} />;
             })}
+            {collapsed ? <><Tooltip label="Mensajes" position="right"><ActionIcon className="collapsed-nav" variant="subtle" color="gray" size={40} onClick={() => openPatientWorkspace('Mensajes')} aria-label="Mensajes"><IconMessageCircle size={19} stroke={1.8} /></ActionIcon></Tooltip><Tooltip label="Tareas" position="right"><ActionIcon className="collapsed-nav" variant="subtle" color="gray" size={40} onClick={() => openPatientWorkspace('Tareas')} aria-label="Tareas"><IconClipboardCheck size={19} stroke={1.8} /></ActionIcon></Tooltip></> : <><NavLink label="Mensajes" leftSection={<IconMessageCircle size={18} stroke={1.8} />} onClick={() => openPatientWorkspace('Mensajes')} /><NavLink label="Tareas" leftSection={<IconClipboardCheck size={18} stroke={1.8} />} onClick={() => openPatientWorkspace('Tareas')} /><Text className="sidebar-group-label">Accesos rápidos</Text><NavLink label="Nuevo paciente" leftSection={<IconPlus size={18} stroke={1.8} />} onClick={openPatient} /><NavLink label="Integraciones" leftSection={<IconAdjustments size={18} stroke={1.8} />} onClick={() => navigate('settings')} /><NavLink label="Configuración" active={screen === 'settings'} leftSection={<IconSettings size={18} stroke={1.8} />} onClick={() => navigate('settings')} /></>}
           </Stack>
         </ScrollArea>
         <div className="navbar-footer">
-          {collapsed ? <Stack align="center" gap="xs"><ActionIcon variant="subtle" color="gray" onClick={() => setCollapsed(false)} aria-label="Expandir navegación"><IconLayoutSidebarLeftExpand size={18} /></ActionIcon><Avatar radius="sm" size={34} color="grape">LO</Avatar></Stack> : <><UnstyledButton className="profile-button"><Avatar radius="sm" size={34} color="grape">LO</Avatar><Box className="profile-copy"><Text size="xs" fw={600}>Dra. Laura Ortega</Text><Text size="xs" c="dimmed">Medicina interna</Text></Box><IconChevronDown size={16} /></UnstyledButton></>}
+          <ActionIcon variant="subtle" color="gray" onClick={() => setCollapsed(!collapsed)} aria-label={collapsed ? 'Expandir navegación' : 'Contraer navegación'} className="sidebar-collapse">{collapsed ? <IconLayoutSidebarLeftExpand size={19} /> : <IconLayoutSidebarLeftCollapse size={19} />}</ActionIcon>
+          {collapsed ? <Avatar radius="xl" size={34} color="gray">LO</Avatar> : <UnstyledButton className="profile-button"><Avatar radius="xl" size={30} color="gray">LO</Avatar><Box className="profile-copy"><Text size="sm" fw={500}>Dra. Laura Ortega</Text></Box></UnstyledButton>}
         </div>
       </AppShell.Navbar>
       <AppShell.Main>
-        <header className="topbar">
+        {screen === 'patient-detail' && <header className="workspace-mobile-header"><Burger opened={mobileOpen} onClick={toggleMobile} size="sm" aria-label="Abrir navegación" /><div><Text size="xs" c="dimmed">Pacientes / Expediente</Text><Text size="sm" fw={700}>Ana María López</Text></div></header>}
+        {screen !== 'patient-detail' && <header className="topbar">
           <Group gap="sm" wrap="nowrap" className="topbar-left"><Burger opened={mobileOpen} onClick={toggleMobile} hiddenFrom="sm" size="sm" /><Box><Title order={1}>{current.title}</Title><Text size="xs" c="dimmed">{current.description}</Text></Box></Group>
           <Group gap="sm" wrap="nowrap">
-            <div className="global-search"><TextInput value={search} onChange={(event) => setSearch(event.currentTarget.value)} leftSection={<IconSearch size={16} />} rightSection={search ? <ActionIcon variant="subtle" color="gray" size="sm" onClick={() => setSearch('')}><IconX size={14} /></ActionIcon> : undefined} placeholder="Buscar pacientes" aria-label="Buscar pacientes" />{matchingPatients.length > 0 && <Paper className="search-results" shadow="md" withBorder>{matchingPatients.map((patient) => <UnstyledButton key={patient.id} onClick={() => { navigate('patient-detail'); setSearch(''); }}><Avatar color={patient.color} radius="sm" size={30}>{patient.initials}</Avatar><Box><Text size="xs" fw={600}>{patient.name}</Text><Text size="xs" c="dimmed">{patient.id}</Text></Box></UnstyledButton>)}</Paper>}</div>
+            <div className="global-search"><TextInput value={search} onChange={(event) => setSearch(event.currentTarget.value)} leftSection={<IconSearch size={16} />} rightSection={search ? <ActionIcon variant="subtle" color="gray" size="sm" onClick={() => setSearch('')}><IconX size={14} /></ActionIcon> : undefined} placeholder="Buscar pacientes" aria-label="Buscar pacientes" />{matchingPatients.length > 0 && <Paper className="search-results" shadow="md" withBorder>{matchingPatients.map((patient) => <UnstyledButton key={patient.id} onClick={() => { openPatientWorkspace(); setSearch(''); }}><Avatar color={patient.color} radius="sm" size={30}>{patient.initials}</Avatar><Box><Text size="xs" fw={600}>{patient.name}</Text><Text size="xs" c="dimmed">{patient.id}</Text></Box></UnstyledButton>)}</Paper>}</div>
             <Indicator color="red" size={8} offset={4}><ActionIcon variant="default" size={36} onClick={openNotifications} aria-label="Notificaciones"><IconBell size={18} /></ActionIcon></Indicator>
             <Menu position="bottom-end" shadow="md"><Menu.Target><ActionIcon variant="default" size={36} aria-label="Acciones rápidas"><IconPlus size={18} /></ActionIcon></Menu.Target><Menu.Dropdown><Menu.Label>Crear</Menu.Label><Menu.Item leftSection={<IconCalendarEvent size={16} />} onClick={openAppointment}>Nueva cita</Menu.Item><Menu.Item leftSection={<IconUser size={16} />} onClick={openPatient}>Nuevo paciente</Menu.Item><Menu.Item leftSection={<IconFileDescription size={16} />} onClick={() => navigate('encounter')}>Nueva consulta</Menu.Item></Menu.Dropdown></Menu>
           </Group>
-        </header>
-        <main className="page-content">
-          {screen === 'dashboard' && <DashboardScreen onOpenPatient={() => navigate('patient-detail')} onNavigate={navigate} />}
-          {screen === 'agenda' && <AgendaScreen onNewAppointment={openAppointment} onOpenPatient={() => navigate('patient-detail')} />}
-          {screen === 'patients' && <PatientsScreen onOpenPatient={() => navigate('patient-detail')} onNewPatient={openPatient} />}
-          {screen === 'patient-detail' && <PatientDetailScreen onBack={() => navigate('patients')} onStartEncounter={() => navigate('encounter')} />}
+        </header>}
+        <main className={`page-content ${screen === 'patient-detail' ? 'workspace-page' : ''}`}>
+          {screen === 'dashboard' && <DashboardScreen onOpenPatient={() => openPatientWorkspace()} onNavigate={navigate} />}
+          {screen === 'agenda' && <AgendaScreen onNewAppointment={openAppointment} onOpenPatient={() => openPatientWorkspace()} />}
+          {screen === 'patients' && <PatientsScreen onOpenPatient={() => openPatientWorkspace()} onNewPatient={openPatient} />}
+          {screen === 'patient-detail' && <PatientWorkspace activeTab={patientTab} onTabChange={setPatientTab} onBack={() => navigate('patients')} onStartEncounter={() => navigate('encounter')} />}
           {screen === 'encounter' && <EncounterScreen onFinish={() => { setToast('La consulta se firmó y quedó en la historia clínica.'); navigate('patient-detail'); window.setTimeout(() => setToast(''), 3400); }} />}
           {screen === 'orders' && <OrdersScreen />}
           {screen === 'settings' && <SettingsScreen />}

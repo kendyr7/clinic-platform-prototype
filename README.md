@@ -1,6 +1,8 @@
 # Clinic Platform Prototype
 
-Prototipo navegable de una plataforma clínica, construido con React, Vite y Mantine. El lenguaje visual sigue la guía preparada en Figma a partir de Medplum Provider App.
+Prototipo navegable de una plataforma clínica, construido con React, Vite y Mantine. El expediente de pacientes toma como referencia visual la captura proporcionada, el [Storybook de Medplum](https://storybook.medplum.com/?path=/docs/medplum-introduction--docs) y la organización del [demo oficial de agenda](https://github.com/medplum/medplum-scheduling-demo).
+
+La vista de pacientes incluye ficha longitudinal, pestañas clínicas, lista y detalle de tareas, filtros, notas y acciones de demostración. Los datos y cambios viven sólo en el navegador durante la sesión: no hay conexión con Medplum ni almacenamiento clínico real.
 
 ## Ejecutar
 
